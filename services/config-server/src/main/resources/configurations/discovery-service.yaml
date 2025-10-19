@@ -1,0 +1,18 @@
+eureka:
+  instance:
+    hostname: localhost
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: false # Set to false if this is a Eureka server
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+    webclient:
+      enabled: true
+  server:
+    enableSelfPreservation: true
+    # Self-preservation and refresh settings
+    evictionIntervalTimerInMs: 60000  # 60 seconds
+    renewalThresholdUpdateIntervalMs: 15000  # 15 seconds
+    responseCacheUpdateIntervalMs: 30000  # 30 seconds

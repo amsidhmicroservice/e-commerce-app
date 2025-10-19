@@ -1,0 +1,19 @@
+spring:
+  # Configuration for connecting to the postgres database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/paymentdb
+    username: alibou
+    password: alibou
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database: POSTGRESQL
+    dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: create
+  kafka:
+    producer:
+      bootstrap-servers: host.docker.internal:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: paymentConfirmation:com.amsidh.mvc.paymentservice.kafka.dto.PaymentNotificationMessage

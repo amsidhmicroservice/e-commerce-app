@@ -1,0 +1,12 @@
+# Configure Server Port and Context Path
+server:
+  port: 8060
+  servlet:
+    context-path: /api/v1/payment-service
+
+spring:
+  application:
+    name: payment-service
+  config:
+    import: optional:configserver:http://localhost:8888/config-server/api/v1/config
+

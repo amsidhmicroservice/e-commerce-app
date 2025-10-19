@@ -1,0 +1,33 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /config-server
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        prefix: /api/v1/config
+        bootstrap: true
+        native:
+          #search-locations: file:/C:/Users/amsid/Springboot-Projects/e-commerce-app/services/config-server/src/main/resources/configurations
+          search-locations: classpath:/configurations
+
+  zipkin:
+    base-url: http://zipkin:9411/
+  sleuth:
+    sampler:
+      probability: 1.0

@@ -1,0 +1,47 @@
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/notificationdb
+      username: alibou
+      password: alibou
+      authentication-database: admin
+  kafka:
+    consumer:
+      bootstrap-servers: host.docker.internal:9092
+      group-id: notification-service-group, order-confirmation-group, payment-confirmation-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping:
+          order-confirmation: com.amsidh.mvc.notificationservice.kafka.order.OrderConfirmation
+          payment-confirmation: com.amsidh.mvc.notificationservice.kafka.payment.PaymentConfirmation
+  mail:
+    host: localhost
+    port: 1025
+    username: alibou
+    password: alibou
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connection-timeout: 5000
+          timeout: 3000
+          write timeout: 5000
+
+
+notification-service:
+  kafka:
+    topic:
+      order-confirmation: order-topic
+      payment-confirmation: payment-topic
+    consumer:
+      group-id:
+        order-confirmation: order-confirmation-group
+        payment-confirmation: payment-confirmation-group
+

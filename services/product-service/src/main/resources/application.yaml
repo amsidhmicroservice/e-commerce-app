@@ -1,0 +1,13 @@
+# Configure Server Port and Context Path
+server:
+  port: 8050
+  servlet:
+    context-path: /api/v1/product-service
+
+spring:
+  application:
+    name: product-service
+  config:
+    import: optional:configserver:http://localhost:8888/config-server/api/v1/config
+
+

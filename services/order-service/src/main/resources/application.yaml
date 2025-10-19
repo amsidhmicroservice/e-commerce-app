@@ -1,0 +1,11 @@
+# Configure Server Port and Context Path
+server:
+  port: 8070
+  servlet:
+    context-path: /api/v1/order-service
+spring:
+  application:
+    name: order-service
+  config:
+    import: optional:configserver:http://localhost:8888/config-server/api/v1/config
+
