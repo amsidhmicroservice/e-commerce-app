@@ -1,6 +1,7 @@
-package com.amsidh.mvc.orderservice.dto;
+package com.amsidh.mvc.dto;
 
-import com.amsidh.mvc.orderservice.util.PaymentMethod;
+
+import com.amsidh.mvc.util.PaymentMethod;
 
 import java.math.BigDecimal;
 

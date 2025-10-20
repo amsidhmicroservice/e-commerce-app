@@ -1,7 +1,7 @@
 package com.amsidh.mvc.orderservice.client.product;
 
-import com.amsidh.mvc.orderservice.dto.PurchaseRequest;
-import com.amsidh.mvc.orderservice.dto.PurchaseResponse;
+import com.amsidh.mvc.dto.PurchaseRequest;
+import com.amsidh.mvc.dto.PurchaseResponse;
 import com.amsidh.mvc.orderservice.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

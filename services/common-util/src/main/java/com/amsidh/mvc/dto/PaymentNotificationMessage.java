@@ -1,10 +1,10 @@
-package com.amsidh.mvc.notificationservice.kafka.payment;
+package com.amsidh.mvc.dto;
 
-import com.amsidh.mvc.notificationservice.util.PaymentMethod;
+import com.amsidh.mvc.util.PaymentMethod;
 
 import java.math.BigDecimal;
 
-public record PaymentConfirmation(
+public record PaymentNotificationMessage(
         String orderReference,
         BigDecimal amount,
         PaymentMethod paymentMethod,

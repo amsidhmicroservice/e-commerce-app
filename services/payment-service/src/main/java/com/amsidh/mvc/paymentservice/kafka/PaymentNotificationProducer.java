@@ -1,6 +1,6 @@
 package com.amsidh.mvc.paymentservice.kafka;
 
-import com.amsidh.mvc.paymentservice.kafka.dto.PaymentNotificationMessage;
+import com.amsidh.mvc.dto.PaymentNotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

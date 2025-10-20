@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.client.customer;
 
-import com.amsidh.mvc.orderservice.dto.CustomerResponse;
+import com.amsidh.mvc.dto.CustomerResponse;
 
 import java.util.Optional;
 

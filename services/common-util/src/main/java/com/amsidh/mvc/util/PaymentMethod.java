@@ -1,4 +1,4 @@
-package com.amsidh.mvc.paymentservice.util;
+package com.amsidh.mvc.util;
 
 public enum PaymentMethod {
     CASH,

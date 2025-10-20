@@ -1,7 +1,7 @@
 package com.amsidh.mvc.orderservice.util;
 
-import com.amsidh.mvc.orderservice.dto.OrderLineRequest;
-import com.amsidh.mvc.orderservice.dto.OrderLineResponse;
+import com.amsidh.mvc.dto.OrderLineRequest;
+import com.amsidh.mvc.dto.OrderLineResponse;
 import com.amsidh.mvc.orderservice.entity.Order;
 import com.amsidh.mvc.orderservice.entity.OrderLine;
 

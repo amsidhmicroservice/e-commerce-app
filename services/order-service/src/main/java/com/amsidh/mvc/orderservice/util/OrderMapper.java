@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.util;
 
-import com.amsidh.mvc.orderservice.dto.*;
+import com.amsidh.mvc.dto.*;
 import com.amsidh.mvc.orderservice.entity.Order;
 
 public interface OrderMapper {

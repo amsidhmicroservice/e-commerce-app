@@ -1,4 +1,4 @@
-package com.amsidh.mvc.orderservice.dto;
+package com.amsidh.mvc.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

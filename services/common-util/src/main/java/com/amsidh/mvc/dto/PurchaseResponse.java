@@ -1,4 +1,4 @@
-package com.amsidh.mvc.orderservice.dto;
+package com.amsidh.mvc.dto;
 
 import java.math.BigDecimal;
 

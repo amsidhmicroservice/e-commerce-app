@@ -1,6 +1,6 @@
-package com.amsidh.mvc.notificationservice.kafka.order;
+package com.amsidh.mvc.dto;
 
-public record Customer(
+public record CustomerResponse(
         String id,
         String firstName,
         String lastName,

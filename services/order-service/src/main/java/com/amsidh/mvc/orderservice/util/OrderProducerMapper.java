@@ -1,9 +1,10 @@
 package com.amsidh.mvc.orderservice.util;
 
-import com.amsidh.mvc.orderservice.dto.CustomerResponse;
-import com.amsidh.mvc.orderservice.dto.OrderRequest;
-import com.amsidh.mvc.orderservice.dto.PurchaseResponse;
-import com.amsidh.mvc.orderservice.kafka.dto.OrderConfirmation;
+
+import com.amsidh.mvc.dto.CustomerResponse;
+import com.amsidh.mvc.dto.OrderConfirmation;
+import com.amsidh.mvc.dto.OrderRequest;
+import com.amsidh.mvc.dto.PurchaseResponse;
 
 import java.util.List;
 

@@ -1,13 +1,12 @@
 package com.amsidh.mvc.orderservice.service.impl;
 
+import com.amsidh.mvc.dto.*;
 import com.amsidh.mvc.orderservice.client.customer.CustomerServiceClient;
 import com.amsidh.mvc.orderservice.client.payment.PaymentServiceClient;
 import com.amsidh.mvc.orderservice.client.product.ProductServiceClient;
-import com.amsidh.mvc.orderservice.dto.*;
 import com.amsidh.mvc.orderservice.entity.Order;
 import com.amsidh.mvc.orderservice.exception.BusinessException;
 import com.amsidh.mvc.orderservice.kafka.OrderProducer;
-import com.amsidh.mvc.orderservice.kafka.dto.OrderConfirmation;
 import com.amsidh.mvc.orderservice.repository.OrderRepository;
 import com.amsidh.mvc.orderservice.service.OrderService;
 import com.amsidh.mvc.orderservice.util.OrderMapper;
@@ -35,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Integer createOrder(OrderRequest orderRequest) {
-        //Check the customerResponse in customerResponse-service microservice
+        //Check the customerResponse in customer-service microservice
         final CustomerResponse customerResponse = customerServiceClient.findCustomerById(orderRequest.customerId()).orElseThrow(() -> {
             log.error("CustomerResponse with id {} not found", orderRequest.customerId());
             return new BusinessException("Cannot create order:: No CustomerResponse exists with provided ID::" + orderRequest.customerId());

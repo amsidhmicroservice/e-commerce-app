@@ -1,7 +1,7 @@
 package com.amsidh.mvc.orderservice.service;
 
-import com.amsidh.mvc.orderservice.dto.OrderLineRequest;
-import com.amsidh.mvc.orderservice.dto.OrderLineResponse;
+import com.amsidh.mvc.dto.OrderLineRequest;
+import com.amsidh.mvc.dto.OrderLineResponse;
 
 import java.util.List;
 

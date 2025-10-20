@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.client.payment;
 
-import com.amsidh.mvc.orderservice.dto.PaymentRequest;
+import com.amsidh.mvc.dto.PaymentRequest;
 import com.amsidh.mvc.orderservice.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.kafka;
 
-import com.amsidh.mvc.orderservice.kafka.dto.OrderConfirmation;
+import com.amsidh.mvc.dto.OrderConfirmation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

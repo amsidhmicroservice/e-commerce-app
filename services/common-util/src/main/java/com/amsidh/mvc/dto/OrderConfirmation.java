@@ -1,6 +1,6 @@
-package com.amsidh.mvc.notificationservice.kafka.order;
+package com.amsidh.mvc.dto;
 
-import com.amsidh.mvc.notificationservice.util.PaymentMethod;
+import com.amsidh.mvc.util.PaymentMethod;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,7 +9,7 @@ public record OrderConfirmation(
         String orderReference,
         BigDecimal totalAmount,
         PaymentMethod paymentMethod,
-        Customer customer,
-        List<Product> products
+        CustomerResponse customerResponse,
+        List<PurchaseResponse> products
 ) {
 }

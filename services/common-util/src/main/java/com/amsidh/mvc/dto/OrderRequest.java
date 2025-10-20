@@ -1,6 +1,6 @@
-package com.amsidh.mvc.orderservice.dto;
+package com.amsidh.mvc.dto;
 
-import com.amsidh.mvc.orderservice.util.PaymentMethod;
+import com.amsidh.mvc.util.PaymentMethod;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -1,9 +1,9 @@
 package com.amsidh.mvc.notificationservice.kafka.consumer;
 
 
+import com.amsidh.mvc.dto.OrderConfirmation;
+import com.amsidh.mvc.dto.PaymentNotificationMessage;
 import com.amsidh.mvc.notificationservice.entity.Notification;
-import com.amsidh.mvc.notificationservice.kafka.order.OrderConfirmation;
-import com.amsidh.mvc.notificationservice.kafka.payment.PaymentConfirmation;
 import com.amsidh.mvc.notificationservice.repository.NotificationRepository;
 import com.amsidh.mvc.notificationservice.service.EmailService;
 import com.amsidh.mvc.notificationservice.util.NotificationMapper;
@@ -28,38 +28,38 @@ public class NotificationConsumer {
         final Notification orderConfirmationNotification = NotificationMapper.toNotification(orderConfirmation);
         notificationRepository.save(orderConfirmationNotification);
 
-        String customerName = orderConfirmation.customer().firstName() + " " + orderConfirmation.customer().lastName();
+        String customerName = orderConfirmation.customerResponse().firstName() + " " + orderConfirmation.customerResponse().lastName();
         try {
             emailService.sendOrderConfirmationEmail(
-                    orderConfirmation.customer().email(),
+                    orderConfirmation.customerResponse().email(),
                     customerName,
                     orderConfirmation.totalAmount(),
                     orderConfirmation.orderReference(),
                     orderConfirmation.products()
             );
         } catch (Exception e) {
-            log.error("Failed to send order confirmation email to {} with error message {}", orderConfirmation.customer().email(), e.getMessage(), e);
+            log.error("Failed to send order confirmation email to {} with error message {}", orderConfirmation.customerResponse().email(), e.getMessage(), e);
         }
     }
 
     @KafkaListener(topics = "${notification-service.kafka.topic.payment-confirmation}", groupId = "${notification-service.kafka.consumer.group-id.payment-confirmation}")
-    public void consumePaymentSuccessNotification(PaymentConfirmation paymentConfirmation) {
-        log.info("Received Payment Confirmation: {}", paymentConfirmation);
+    public void consumePaymentSuccessNotification(PaymentNotificationMessage paymentNotificationMessage) {
+        log.info("Received Payment Confirmation: {}", paymentNotificationMessage);
         // Add logic to send notification for payment confirmation
         //Save the payment confirmation to the database
-        final Notification paymentConfirmationNotification = NotificationMapper.toNotification(paymentConfirmation);
+        final Notification paymentConfirmationNotification = NotificationMapper.toNotification(paymentNotificationMessage);
         notificationRepository.save(paymentConfirmationNotification);
 
-        String customerName = paymentConfirmation.customerFirstName() + " " + paymentConfirmation.customerLastName();
+        String customerName = paymentNotificationMessage.customerFirstName() + " " + paymentNotificationMessage.customerLastName();
         try {
             emailService.sendPaymentSuccessEmail(
-                    paymentConfirmation.customerEmailId(),
+                    paymentNotificationMessage.customerEmailId(),
                     customerName,
-                    paymentConfirmation.amount(),
-                    paymentConfirmation.orderReference()
+                    paymentNotificationMessage.amount(),
+                    paymentNotificationMessage.orderReference()
             );
         } catch (Exception e) {
-            log.error("Failed to send payment confirmation email to {} with error message {}", paymentConfirmation.customerEmailId(), e.getMessage(), e);
+            log.error("Failed to send payment confirmation email to {} with error message {}", paymentNotificationMessage.customerEmailId(), e.getMessage(), e);
         }
 
     }

@@ -1,4 +1,4 @@
-package com.amsidh.mvc.orderservice.dto;
+package com.amsidh.mvc.dto;
 
 public record OrderLineResponse(
         Integer id,

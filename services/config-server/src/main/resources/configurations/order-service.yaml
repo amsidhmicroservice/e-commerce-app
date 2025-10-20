@@ -17,7 +17,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: orderConfirmation:com.amsidh.mvc.orderservice.kafka.dto.OrderConfirmation
+        spring.json.type.mapping: orderConfirmation:com.amsidh.mvc.dto.OrderConfirmation
 
 # Configure Eureka client for service discovery
 eureka:

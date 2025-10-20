@@ -1,6 +1,6 @@
 config-service: 8888
 discovery-service: 8761
-customerResponse-service: 8090
+customer-service: 8090
 order-service: 8070
 payment-service: 8060
 product-service: 8050

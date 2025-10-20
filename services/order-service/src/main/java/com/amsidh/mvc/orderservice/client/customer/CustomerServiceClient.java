@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.client.customer;
 
-import com.amsidh.mvc.orderservice.dto.CustomerResponse;
+import com.amsidh.mvc.dto.CustomerResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.Optional;
 
 @FeignClient(
-        name = "customerResponse-service",
+        name = "customer-service",
         url = "${application.config.customer-service.url}",
         fallback = CustomerServiceClientFallback.class
 )
