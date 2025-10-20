@@ -16,6 +16,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,12 +32,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderProducer orderProducer;
     private final PaymentServiceClient paymentServiceClient;
 
+    @Transactional
     @Override
     public Integer createOrder(OrderRequest orderRequest) {
-        //Check the customer in customer-service microservice
+        //Check the customerResponse in customerResponse-service microservice
         final CustomerResponse customerResponse = customerServiceClient.findCustomerById(orderRequest.customerId()).orElseThrow(() -> {
-            log.error("Customer with id {} not found", orderRequest.customerId());
-            return new BusinessException("Cannot create order:: No Customer exists with provided ID::" + orderRequest.customerId());
+            log.error("CustomerResponse with id {} not found", orderRequest.customerId());
+            return new BusinessException("Cannot create order:: No CustomerResponse exists with provided ID::" + orderRequest.customerId());
         });
 
         //Check the product is available in product-service microservice

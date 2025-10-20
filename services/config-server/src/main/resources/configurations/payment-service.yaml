@@ -9,7 +9,7 @@ spring:
     database: POSTGRESQL
     dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   kafka:
     producer:
       bootstrap-servers: host.docker.internal:9092

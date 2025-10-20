@@ -2,10 +2,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/notificationdb
-      username: alibou
-      password: alibou
-      authentication-database: admin
+      uri: mongodb://alibou:alibou@localhost:27017/notificationdb?authSource=admin
   kafka:
     consumer:
       bootstrap-servers: host.docker.internal:9092

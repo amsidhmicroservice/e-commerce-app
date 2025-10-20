@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.amsidh.mvc</groupId>
-    <artifactId>customer-service</artifactId>
+    <artifactId>customerResponse-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>customer-service</name>
-    <description>customer-service</description>
+    <name>customerResponse-service</name>
+    <description>customerResponse-service</description>
     <url/>
     <licenses>
         <license/>

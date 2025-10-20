@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-public record Customer(
-        Integer id,
+public record CustomerResponse(
+        String id,
         @NotNull(message = "First name must not be null")
         String firstName,
         @NotNull(message = "Last name must not be null")

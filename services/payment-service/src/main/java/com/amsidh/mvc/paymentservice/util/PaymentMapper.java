@@ -7,7 +7,6 @@ import com.amsidh.mvc.paymentservice.kafka.dto.PaymentNotificationMessage;
 public interface PaymentMapper {
     static Payment toPayment(PaymentRequest paymentRequest) {
         return Payment.builder()
-                .id(paymentRequest.id())
                 .amount(paymentRequest.amount())
                 .paymentMethod(paymentRequest.paymentMethod())
                 .orderId(paymentRequest.orderId())
@@ -19,9 +18,9 @@ public interface PaymentMapper {
                 paymentRequest.orderReference(),
                 paymentRequest.amount(),
                 paymentRequest.paymentMethod(),
-                paymentRequest.customer().firstName(),
-                paymentRequest.customer().lastName(),
-                paymentRequest.customer().email()
+                paymentRequest.customerResponse().firstName(),
+                paymentRequest.customerResponse().lastName(),
+                paymentRequest.customerResponse().email()
         );
     }
 }

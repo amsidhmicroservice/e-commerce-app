@@ -32,3 +32,10 @@ logging:
     #org.springframework.web: DEBUG           # Uncomment for troubleshooting
     reactor.netty.http.client: DEBUG
     com.amsidh.mvc: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL

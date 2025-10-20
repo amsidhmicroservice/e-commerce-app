@@ -19,7 +19,8 @@ public class PaymentController {
    private final PaymentService paymentService;
 
    @PostMapping
-   public ResponseEntity<Integer> createPayment(@RequestBody @Valid PaymentRequest paymentRequest) {
+   public ResponseEntity<Integer> createPayment(
+           @RequestBody @Valid PaymentRequest paymentRequest) {
       log.info("Received payment request: {}", paymentRequest);
       Integer paymentId = paymentService.createPayment(paymentRequest);
       log.info("Payment created with id: {}", paymentId);

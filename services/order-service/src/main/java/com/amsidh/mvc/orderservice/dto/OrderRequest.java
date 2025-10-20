@@ -16,9 +16,9 @@ public record OrderRequest(
         BigDecimal amount,
         @NotNull(message = "Payment method cannot be null")
         PaymentMethod paymentMethod,
-        @NotNull(message = "Customer ID cannot be null")
-        @NotEmpty(message = "Customer ID cannot be empty")
-        @NotBlank(message = "Customer ID cannot be blank")
+        @NotNull(message = "CustomerResponse ID cannot be null")
+        @NotEmpty(message = "CustomerResponse ID cannot be empty")
+        @NotBlank(message = "CustomerResponse ID cannot be blank")
         String customerId,
         @NotEmpty(message = "Product list cannot be empty")
         List<PurchaseRequest> productList

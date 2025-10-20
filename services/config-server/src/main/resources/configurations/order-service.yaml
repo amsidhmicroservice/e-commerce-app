@@ -10,7 +10,7 @@ spring:
     database: POSTGRESQL
     dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   kafka:
     producer:
       bootstrap-servers: localhost:9092
@@ -34,13 +34,13 @@ application:
   config:
     customer-service:
       # This should be customer-service gateway url
-      url: http://localhost:8090/api/v1/customer-service/customers
+      url: http://localhost:8080/api/v1/customer-service/customers
     product-service:
       # This should be product-service gateway url
-      url: http://localhost:8050/api/v1/product-service/products
+      url: http://localhost:8080/api/v1/product-service/products
     payment-service:
       # This should be payment-service gateway url
-      url: http://localhost:8060/api/v1/payment-service/payments
+      url: http://localhost:8080/api/v1/payment-service/payments
 
 
 

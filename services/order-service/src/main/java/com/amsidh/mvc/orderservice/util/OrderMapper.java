@@ -34,13 +34,13 @@ public interface OrderMapper {
         );
     }
 
-    static PaymentRequest toPaymentRequest(OrderRequest orderRequest, Order savedOrder, CustomerResponse customerResponse) {
+    static PaymentRequest toPaymentRequest(OrderRequest orderRequest, Order savedOrder, CustomerResponse customer) {
         return new PaymentRequest(
                 orderRequest.amount(),
                 orderRequest.paymentMethod(),
                 savedOrder.getId(),
                 savedOrder.getReference(),
-                customerResponse
+                customer
         );
     }
 }
