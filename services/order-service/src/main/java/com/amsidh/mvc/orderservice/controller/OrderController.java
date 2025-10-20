@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @Slf4j
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     private final OrderService orderService;

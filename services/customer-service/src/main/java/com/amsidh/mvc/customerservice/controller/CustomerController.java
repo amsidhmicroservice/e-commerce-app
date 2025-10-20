@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/customers")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     private final CustomerService customerService;
