@@ -1,8 +1,9 @@
 eureka:
   instance:
+    prefer-ip-address: false
     hostname: localhost
-    preferIpAddress: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    instance-id: ${eureka.instance.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}:${random.value}}
+
   client:
     register-with-eureka: false # Set to false if this is a Eureka server
     fetch-registry: true
