@@ -2,8 +2,8 @@ package com.amsidh.mvc.productservice.controller;
 
 import com.amsidh.mvc.productservice.dto.ProductPurchaseRequest;
 import com.amsidh.mvc.productservice.dto.ProductPurchaseResponse;
-import com.amsidh.mvc.productservice.dto.ProductRequest;
-import com.amsidh.mvc.productservice.dto.ProductResponse;
+import com.amsidh.mvc.productservice.dto.CreateProductRequest;
+import com.amsidh.mvc.productservice.dto.CreateProductResponse;
 import com.amsidh.mvc.productservice.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +24,9 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Integer> createProduct(@RequestBody @Valid ProductRequest productRequest) {
+    public ResponseEntity<Integer> createProduct(@RequestBody @Valid CreateProductRequest createProductRequest) {
         log.info("Creating product");
-        Integer productId = productService.createProduct(productRequest);
+        Integer productId = productService.createProduct(createProductRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(productId);
     }
 
@@ -37,14 +37,14 @@ public class ProductController {
     }
 
     @GetMapping("/{product-id}")
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable("product-id") Integer productId) {
+    public ResponseEntity<CreateProductResponse> getProductById(@PathVariable("product-id") Integer productId) {
         log.info("Getting product by id: {}", productId);
-        ProductResponse productResponse = productService.getProductById(productId);
-        return ResponseEntity.ok(productResponse);
+        CreateProductResponse createProductResponse = productService.getProductById(productId);
+        return ResponseEntity.ok(createProductResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    public ResponseEntity<List<CreateProductResponse>> getAllProducts() {
         log.info("Getting all products");
         return ResponseEntity.ok(productService.getAllProducts());
     }

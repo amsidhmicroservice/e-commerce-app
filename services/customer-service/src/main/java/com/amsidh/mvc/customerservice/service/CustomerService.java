@@ -1,20 +1,20 @@
 package com.amsidh.mvc.customerservice.service;
 
-import com.amsidh.mvc.customerservice.dto.CustomerRequest;
-import com.amsidh.mvc.customerservice.dto.CustomerResponse;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerRequest;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerResponse;
 
 import java.util.List;
 
 public interface CustomerService {
-    String createCustomer(CustomerRequest customerRequest);
+    String createCustomer(CreateCustomerRequest createCustomerRequest);
 
-    void updateCustomer(CustomerRequest customerRequest);
+    void updateCustomer(CreateCustomerRequest createCustomerRequest);
 
-    List<CustomerResponse> getAllCustomers();
+    List<CreateCustomerResponse> getAllCustomers();
 
     Boolean existsById(String customerId);
 
-    CustomerResponse findById(String customerId);
+    CreateCustomerResponse findById(String customerId);
 
     void deleteById(String customerId);
 }

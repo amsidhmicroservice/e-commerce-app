@@ -1,3 +1,4 @@
+management.endpoint.gateway.access: read_only
 spring:
   cloud:
     gateway:

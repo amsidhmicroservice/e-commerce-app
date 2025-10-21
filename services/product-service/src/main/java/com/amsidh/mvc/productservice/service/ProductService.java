@@ -2,17 +2,17 @@ package com.amsidh.mvc.productservice.service;
 
 import com.amsidh.mvc.productservice.dto.ProductPurchaseRequest;
 import com.amsidh.mvc.productservice.dto.ProductPurchaseResponse;
-import com.amsidh.mvc.productservice.dto.ProductRequest;
-import com.amsidh.mvc.productservice.dto.ProductResponse;
+import com.amsidh.mvc.productservice.dto.CreateProductRequest;
+import com.amsidh.mvc.productservice.dto.CreateProductResponse;
 
 import java.util.List;
 
 public interface ProductService {
-    Integer createProduct(ProductRequest productRequest);
+    Integer createProduct(CreateProductRequest createProductRequest);
 
     List<ProductPurchaseResponse> purchaseProduct(List<ProductPurchaseRequest> productPurchaseRequests);
 
-    ProductResponse getProductById(Integer productId);
+    CreateProductResponse getProductById(Integer productId);
 
-    List<ProductResponse> getAllProducts();
+    List<CreateProductResponse> getAllProducts();
 }

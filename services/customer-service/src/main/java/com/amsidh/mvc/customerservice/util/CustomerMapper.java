@@ -1,27 +1,27 @@
 package com.amsidh.mvc.customerservice.util;
 
-import com.amsidh.mvc.customerservice.dto.CustomerRequest;
-import com.amsidh.mvc.customerservice.dto.CustomerResponse;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerRequest;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerResponse;
 import com.amsidh.mvc.customerservice.entity.Customer;
 
 public class CustomerMapper {
-    public static Customer toCustomer(CustomerRequest customerRequest) {
-        if (customerRequest == null)
+    public static Customer toCustomer(CreateCustomerRequest createCustomerRequest) {
+        if (createCustomerRequest == null)
             return null;
         return Customer.builder()
-                .id(customerRequest.id())
-                .firstName(customerRequest.firstName())
-                .lastName(customerRequest.lastName())
-                .email(customerRequest.email())
-                .address(customerRequest.address())
+                .id(createCustomerRequest.id())
+                .firstName(createCustomerRequest.firstName())
+                .lastName(createCustomerRequest.lastName())
+                .email(createCustomerRequest.email())
+                .address(createCustomerRequest.address())
                 .build();
     }
 
-    public static CustomerRequest toCustomerCreateRequest(Customer customer) {
+    public static CreateCustomerRequest toCustomerCreateRequest(Customer customer) {
         if (customer == null)
             return null;
 
-        return new CustomerRequest(
+        return new CreateCustomerRequest(
                 customer.getId(),
                 customer.getFirstName(),
                 customer.getLastName(),
@@ -30,11 +30,11 @@ public class CustomerMapper {
     }
 
 
-    public static CustomerResponse toCustomerResponse(Customer customer) {
+    public static CreateCustomerResponse toCustomerResponse(Customer customer) {
         if (customer == null)
             return null;
 
-        return new CustomerResponse(
+        return new CreateCustomerResponse(
                 customer.getId(),
                 customer.getFirstName(),
                 customer.getLastName(),

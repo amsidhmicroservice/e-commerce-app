@@ -2,11 +2,10 @@ package com.amsidh.mvc.productservice.service.impl;
 
 import com.amsidh.mvc.productservice.dto.ProductPurchaseRequest;
 import com.amsidh.mvc.productservice.dto.ProductPurchaseResponse;
-import com.amsidh.mvc.productservice.dto.ProductRequest;
-import com.amsidh.mvc.productservice.dto.ProductResponse;
+import com.amsidh.mvc.productservice.dto.CreateProductRequest;
+import com.amsidh.mvc.productservice.dto.CreateProductResponse;
 import com.amsidh.mvc.productservice.entity.Product;
 import com.amsidh.mvc.productservice.exception.ProductPurchaseException;
-import com.amsidh.mvc.productservice.repository.CategoryRepository;
 import com.amsidh.mvc.productservice.repository.ProductRepository;
 import com.amsidh.mvc.productservice.service.ProductService;
 import com.amsidh.mvc.productservice.util.ProductMapper;
@@ -25,8 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public Integer createProduct(ProductRequest productRequest) {
-        Product product = ProductMapper.toProduct(productRequest);
+    public Integer createProduct(CreateProductRequest createProductRequest) {
+        Product product = ProductMapper.toProduct(createProductRequest);
         return productRepository.save(product).getId();
     }
 
@@ -68,13 +67,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse getProductById(Integer productId) {
+    public CreateProductResponse getProductById(Integer productId) {
         return productRepository.findById(productId).map(ProductMapper::toProductResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
     }
 
     @Override
-    public List<ProductResponse> getAllProducts() {
+    public List<CreateProductResponse> getAllProducts() {
         return productRepository.findAll().stream().map(ProductMapper::toProductResponse).toList();
     }
 }

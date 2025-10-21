@@ -1,7 +1,7 @@
 package com.amsidh.mvc.customerservice.controller;
 
-import com.amsidh.mvc.customerservice.dto.CustomerRequest;
-import com.amsidh.mvc.customerservice.dto.CustomerResponse;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerRequest;
+import com.amsidh.mvc.customerservice.dto.CreateCustomerResponse;
 import com.amsidh.mvc.customerservice.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,19 +21,19 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<String> createCustomer(@RequestBody CustomerRequest customerRequest) {
+    public ResponseEntity<String> createCustomer(@RequestBody CreateCustomerRequest createCustomerRequest) {
         log.info("Create Customer API is called");
-        return ResponseEntity.ok(customerService.createCustomer(customerRequest));
+        return ResponseEntity.ok(customerService.createCustomer(createCustomerRequest));
     }
 
     @PutMapping
-    public ResponseEntity<Void> updateCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
-        customerService.updateCustomer(customerRequest);
+    public ResponseEntity<Void> updateCustomer(@RequestBody @Valid CreateCustomerRequest createCustomerRequest) {
+        customerService.updateCustomer(createCustomerRequest);
         return ResponseEntity.accepted().build();
     }
 
     @GetMapping
-    public List<CustomerResponse> getAllCustomers() {
+    public List<CreateCustomerResponse> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
@@ -44,7 +44,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customer-id}")
-    public ResponseEntity<CustomerResponse> getCustomerById(
+    public ResponseEntity<CreateCustomerResponse> getCustomerById(
             @PathVariable(name = "customer-id") String customerId) {
         return ResponseEntity.ok(customerService.findById(customerId));
     }

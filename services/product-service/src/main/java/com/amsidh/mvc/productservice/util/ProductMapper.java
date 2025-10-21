@@ -1,28 +1,28 @@
 package com.amsidh.mvc.productservice.util;
 
 import com.amsidh.mvc.productservice.dto.ProductPurchaseResponse;
-import com.amsidh.mvc.productservice.dto.ProductRequest;
-import com.amsidh.mvc.productservice.dto.ProductResponse;
+import com.amsidh.mvc.productservice.dto.CreateProductRequest;
+import com.amsidh.mvc.productservice.dto.CreateProductResponse;
 import com.amsidh.mvc.productservice.entity.Category;
 import com.amsidh.mvc.productservice.entity.Product;
 
 public interface ProductMapper {
 
-    static Product toProduct(ProductRequest productRequest) {
+    static Product toProduct(CreateProductRequest createProductRequest) {
         return Product.builder()
-                .name(productRequest.name())
-                .description(productRequest.description())
-                .price(productRequest.price())
-                .availableQuantity(productRequest.availableQuantity())
-                .price(productRequest.price())
+                .name(createProductRequest.name())
+                .description(createProductRequest.description())
+                .price(createProductRequest.price())
+                .availableQuantity(createProductRequest.availableQuantity())
+                .price(createProductRequest.price())
                 .category(Category.builder()
-                        .id(productRequest.categoryId())
+                        .id(createProductRequest.categoryId())
                         .build())
                 .build();
     }
 
-    static ProductResponse toProductResponse(Product product) {
-        return new ProductResponse(
+    static CreateProductResponse toProductResponse(Product product) {
+        return new CreateProductResponse(
                 product.getId(),
                 product.getName(),
                 product.getDescription(),

@@ -6,8 +6,6 @@ management:
   endpoint:
     health:
       show-details: always
-    gateway:
-      access: read_only
 
 eureka:
   client:

@@ -4,7 +4,7 @@ import com.amsidh.mvc.customerservice.entity.Address;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
-public record CustomerRequest(
+public record CreateCustomerRequest(
         String id,
 
         @NotNull(message = "First name cannot be null")

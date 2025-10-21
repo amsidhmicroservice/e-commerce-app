@@ -2,7 +2,7 @@ package com.amsidh.mvc.customerservice.dto;
 
 import com.amsidh.mvc.customerservice.entity.Address;
 
-public record CustomerResponse(
+public record CreateCustomerResponse(
         String id,
 
         String firstName,
