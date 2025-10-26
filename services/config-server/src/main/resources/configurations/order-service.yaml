@@ -1,6 +1,4 @@
-
 spring:
-  # Configuration for connecting to the postgres database
   datasource:
     url: jdbc:postgresql://localhost:5432/orderdb
     username: alibou
@@ -17,7 +15,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: orderConfirmation:com.amsidh.mvc.dto.OrderConfirmation
+        spring.json.type.mapping: orderConfirmation:com.amsidh.mvc.kafka.order.OrderConfirmation
 
 # Microservice Inter-service Communication Configuration
 application:

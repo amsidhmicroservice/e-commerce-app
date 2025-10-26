@@ -1,6 +1,6 @@
 package com.amsidh.mvc.notificationservice.service.impl;
 
-import com.amsidh.mvc.dto.PurchaseResponse;
+import com.amsidh.mvc.kafka.order.PurchaseResponse;
 import com.amsidh.mvc.notificationservice.service.EmailService;
 import com.amsidh.mvc.notificationservice.util.EmailTemplate;
 import jakarta.mail.MessagingException;

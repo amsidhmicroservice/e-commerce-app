@@ -1,18 +1,23 @@
 package com.amsidh.mvc.orderservice.client.customer;
 
-import com.amsidh.mvc.dto.CustomerResponse;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.amsidh.mvc.kafka.order.CustomerResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
-@FeignClient(
-        name = "customer-service",
-        url = "${application.config.customer-service.url}",
-        fallback = CustomerServiceClientFallback.class
-)
-public interface CustomerServiceClient {
-    @GetMapping(path = "/{customer-id}")
-    Optional<CustomerResponse> findCustomerById(@PathVariable("customer-id") String customerId);
+@Component
+@RequiredArgsConstructor
+public class CustomerServiceClient {
+
+    @Value("${application.config.customer-service.url}")
+    private String customerServiceUrl;
+    private final RestTemplate restTemplate;
+
+    public Optional<CustomerResponse> findCustomerById(String customerId) {
+        final CustomerResponse customerResponse = restTemplate.getForObject(customerServiceUrl + "/" + customerId, CustomerResponse.class);
+        return Optional.of(customerResponse);
+    }
 }

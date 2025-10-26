@@ -1,9 +1,9 @@
 package com.amsidh.mvc.paymentservice.service.impl;
 
-import com.amsidh.mvc.dto.PaymentRequest;
+import com.amsidh.mvc.kafka.payment.PaymentNotificationMessage;
+import com.amsidh.mvc.paymentservice.dto.PaymentRequest;
 import com.amsidh.mvc.paymentservice.entity.Payment;
 import com.amsidh.mvc.paymentservice.kafka.PaymentNotificationProducer;
-import com.amsidh.mvc.dto.PaymentNotificationMessage;
 import com.amsidh.mvc.paymentservice.repository.PaymentRepository;
 import com.amsidh.mvc.paymentservice.service.PaymentService;
 import com.amsidh.mvc.paymentservice.util.PaymentMapper;

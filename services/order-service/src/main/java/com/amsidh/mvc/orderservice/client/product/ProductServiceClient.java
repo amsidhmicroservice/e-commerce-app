@@ -1,7 +1,7 @@
 package com.amsidh.mvc.orderservice.client.product;
 
-import com.amsidh.mvc.dto.PurchaseRequest;
-import com.amsidh.mvc.dto.PurchaseResponse;
+import com.amsidh.mvc.kafka.order.PurchaseResponse;
+import com.amsidh.mvc.orderservice.dto.PurchaseRequest;
 import com.amsidh.mvc.orderservice.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceClient {
 
-    @Value("${application.config.product-service.url:http://localhost:8050/api/v1/product-service/products}")
+    @Value("${application.config.product-service.url}")
     private String productServiceUrl;
     private final RestTemplate restTemplate;
 

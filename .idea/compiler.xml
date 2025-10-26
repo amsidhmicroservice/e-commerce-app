@@ -8,8 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
-        <module name="discovery-service" />
-        <module name="gateway-service" />
       </profile>
       <profile name="Annotation profile for product-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -18,24 +16,21 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.40/lombok-1.18.40.jar" />
         </processorPath>
-        <module name="product-service" />
-        <module name="common-util" />
         <module name="payment-service" />
-        <module name="order-service" />
         <module name="customer-service" />
+        <module name="gateway-service" />
+        <module name="product-service" />
+        <module name="order-service" />
         <module name="notification-service" />
+        <module name="discovery-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="customerResponse-service" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="21" />
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="common-util" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="customer-service" options="-parameters" />
-      <module name="customerResponse-service" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
       <module name="notification-service" options="-parameters" />

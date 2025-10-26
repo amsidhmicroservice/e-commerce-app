@@ -1,6 +1,7 @@
 package com.amsidh.mvc.orderservice.util;
 
-import com.amsidh.mvc.dto.*;
+import com.amsidh.mvc.kafka.order.CustomerResponse;
+import com.amsidh.mvc.orderservice.dto.*;
 import com.amsidh.mvc.orderservice.entity.Order;
 
 public interface OrderMapper {
@@ -15,7 +16,9 @@ public interface OrderMapper {
                 .build();
     }
 
-    static OrderLineRequest toOrderLineRequest(PurchaseRequest purchaseRequest, Order savedOrder) {
+    static OrderLineRequest toOrderLineRequest(
+            PurchaseRequest purchaseRequest,
+            Order savedOrder) {
         return new OrderLineRequest(
                 null,
                 savedOrder.getId(),
@@ -34,7 +37,10 @@ public interface OrderMapper {
         );
     }
 
-    static PaymentRequest toPaymentRequest(OrderRequest orderRequest, Order savedOrder, CustomerResponse customer) {
+    static PaymentRequest toPaymentRequest(
+            OrderRequest orderRequest,
+            Order savedOrder,
+            CustomerResponse customer) {
         return new PaymentRequest(
                 orderRequest.amount(),
                 orderRequest.paymentMethod(),

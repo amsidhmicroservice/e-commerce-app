@@ -1,6 +1,6 @@
 package com.amsidh.mvc.notificationservice.service;
 
-import com.amsidh.mvc.dto.PurchaseResponse;
+import com.amsidh.mvc.kafka.order.PurchaseResponse;
 import jakarta.mail.MessagingException;
 
 import java.math.BigDecimal;

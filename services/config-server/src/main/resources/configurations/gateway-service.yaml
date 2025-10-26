@@ -26,21 +26,3 @@ spring:
           predicates:
             - Path=/api/v1/payment-service/**
 
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowed-origins: "*"
-            allowed-methods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-              - PATCH
-            allowed-headers:
-              - "*"
-            allow-credentials: false
-            max-age: 3600
-
-
-

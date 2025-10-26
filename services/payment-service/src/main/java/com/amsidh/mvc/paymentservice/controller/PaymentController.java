@@ -1,6 +1,6 @@
 package com.amsidh.mvc.paymentservice.controller;
 
-import com.amsidh.mvc.dto.PaymentRequest;
+import com.amsidh.mvc.paymentservice.dto.PaymentRequest;
 import com.amsidh.mvc.paymentservice.service.PaymentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

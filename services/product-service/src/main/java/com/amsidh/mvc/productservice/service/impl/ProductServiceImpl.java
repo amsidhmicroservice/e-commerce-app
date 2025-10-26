@@ -32,22 +32,26 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductPurchaseResponse> purchaseProduct(
             List<ProductPurchaseRequest> productPurchaseRequests) {
-
+        log.info("Inside purchaseProduct method of ProductServiceImpl");
         final List<Integer> productIds = productPurchaseRequests.stream()
                 .map(ProductPurchaseRequest::productId)
                 .toList();
         // Look whether all products are available in the store
+        log.info("Look whether all products are available in the store");
         final List<Product> storeProducts = productRepository.findAllById(productIds);
 
         if (storeProducts.size() != productIds.size()) {
+            log.error("One or more products not found");
             throw new ProductPurchaseException("One or more products not found");
         }
         // Check for the available quantity
+        log.info("Check for the available quantity");
         final List<ProductPurchaseRequest> sortedProductsById = productPurchaseRequests
                 .stream()
                 .sorted(Comparator.comparing(ProductPurchaseRequest::productId))
                 .toList();
         // Prepare the response
+        log.info("Prepare ProductPurchaseResponse response");
         return sortedProductsById.stream()
                 .map(productPurchaseRequest -> {
                     Product storeProduct = storeProducts.stream()
@@ -68,12 +72,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public CreateProductResponse getProductById(Integer productId) {
+        log.info("Inside getProductById ProductServiceImpl");
         return productRepository.findById(productId).map(ProductMapper::toProductResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with id: " + productId));
     }
 
     @Override
     public List<CreateProductResponse> getAllProducts() {
+        log.info("Inside getAllProducts ProductServiceImpl");
         return productRepository.findAll().stream().map(ProductMapper::toProductResponse).toList();
     }
 }

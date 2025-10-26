@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.controller;
 
-import com.amsidh.mvc.dto.OrderLineResponse;
+import com.amsidh.mvc.orderservice.dto.OrderLineResponse;
 import com.amsidh.mvc.orderservice.service.OrderLineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

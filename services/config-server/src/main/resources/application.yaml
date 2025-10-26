@@ -10,6 +10,10 @@ management:
   endpoint:
     health:
       show-details: always
+  tracing:
+    enabled: true
+    sampling:
+        probability: 1.0
 
 
 spring:
@@ -28,6 +32,3 @@ spring:
 
   zipkin:
     base-url: http://zipkin:9411/
-  sleuth:
-    sampler:
-      probability: 1.0

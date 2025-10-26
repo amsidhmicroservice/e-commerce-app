@@ -1,6 +1,6 @@
 package com.amsidh.mvc.orderservice.entity;
 
-import com.amsidh.mvc.util.PaymentMethod;
+import com.amsidh.mvc.kafka.order.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

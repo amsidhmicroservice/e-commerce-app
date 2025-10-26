@@ -1,44 +1,17 @@
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "health,info" # Restrict exposed endpoints for production
-  endpoint:
-    health:
-      show-details: always
-
 eureka:
+  instance:
+    hostname: localhost
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true # Set to false if this is a Eureka server
-    fetch-registry: true
-  instance:
-    prefer-ip-address: false
-    hostname: localhost
-    instance-id: ${eureka.instance.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}:${random.value}}
-
+      defaultZone: http://localhost:8761/eureka
+name:
+  value: alibou
 spring:
   cloud:
     config:
-      override-system-properties: false # Avoid conflicts with other properties
-  zipkin:
-    base-url: http://zipkin:9411/
-  sleuth:
-    sampler:
+      override-system-properties: false
+
+management:
+  tracing:
+    sampling:
       probability: 1.0
-
-logging:
-  level:
-    root: INFO
-    #org.springframework.cloud.gateway: DEBUG # Uncomment for troubleshooting
-    #org.springframework.web: DEBUG           # Uncomment for troubleshooting
-    reactor.netty.http.client: DEBUG
-    com.amsidh.mvc: DEBUG
-    org.springframework.cloud.openfeign: DEBUG
-
-feign:
-  client:
-    config:
-      default:
-        loggerLevel: FULL

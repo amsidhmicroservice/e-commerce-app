@@ -1,7 +1,7 @@
 package com.amsidh.mvc.notificationservice.util;
 
-import com.amsidh.mvc.dto.OrderConfirmation;
-import com.amsidh.mvc.dto.PaymentNotificationMessage;
+import com.amsidh.mvc.kafka.order.OrderConfirmation;
+import com.amsidh.mvc.kafka.payment.PaymentNotificationMessage;
 import com.amsidh.mvc.notificationservice.entity.Notification;
 
 public class NotificationMapper {

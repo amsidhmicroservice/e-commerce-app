@@ -1,8 +1,8 @@
 package com.amsidh.mvc.paymentservice.util;
 
-import com.amsidh.mvc.dto.PaymentRequest;
+import com.amsidh.mvc.kafka.payment.PaymentNotificationMessage;
+import com.amsidh.mvc.paymentservice.dto.PaymentRequest;
 import com.amsidh.mvc.paymentservice.entity.Payment;
-import com.amsidh.mvc.dto.PaymentNotificationMessage;
 
 public interface PaymentMapper {
     static Payment toPayment(PaymentRequest paymentRequest) {

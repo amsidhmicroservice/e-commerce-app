@@ -25,12 +25,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String createCustomer(CreateCustomerRequest createCustomerRequest) {
+        log.info("Creating new customer");
         final Customer savedCustomer = customerRepository.save(CustomerMapper.toCustomer(createCustomerRequest));
         return savedCustomer.getId() + " saved successfully";
     }
 
     @Override
     public void updateCustomer(CreateCustomerRequest createCustomerRequest) {
+        log.info("Updating existing customer");
         final Customer customer = customerRepository.findById(createCustomerRequest.id())
                 .orElseThrow(() -> new CustomerNotFoundException(format("Customer not found with id: %s", createCustomerRequest.id())));
         mergeCustomer(createCustomerRequest, customer);
@@ -40,16 +42,19 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CreateCustomerResponse> getAllCustomers() {
+        log.info("Getting all customers");
         return customerRepository.findAll().stream().map(CustomerMapper::toCustomerResponse).toList();
     }
 
     @Override
     public Boolean existsById(String customerId) {
+        log.info("Is customer with id {} exists", customerId);
         return customerRepository.existsById(customerId);
     }
 
     @Override
     public CreateCustomerResponse findById(String customerId) {
+        log.info("Get customer with id {}", customerId);
         return customerRepository.findById(customerId)
                 .map(CustomerMapper::toCustomerResponse)
                 .orElseThrow(() -> new CustomerNotFoundException(format("Customer not found with id: %s", customerId)));
@@ -57,6 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteById(String customerId) {
+        log.info("Delete customer with id {}", customerId);
         customerRepository.deleteById(customerId);
     }
 

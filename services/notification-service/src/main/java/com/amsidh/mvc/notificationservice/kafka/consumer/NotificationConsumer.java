@@ -1,8 +1,8 @@
 package com.amsidh.mvc.notificationservice.kafka.consumer;
 
 
-import com.amsidh.mvc.dto.OrderConfirmation;
-import com.amsidh.mvc.dto.PaymentNotificationMessage;
+import com.amsidh.mvc.kafka.order.OrderConfirmation;
+import com.amsidh.mvc.kafka.payment.PaymentNotificationMessage;
 import com.amsidh.mvc.notificationservice.entity.Notification;
 import com.amsidh.mvc.notificationservice.repository.NotificationRepository;
 import com.amsidh.mvc.notificationservice.service.EmailService;
