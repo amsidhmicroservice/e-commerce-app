@@ -53,6 +53,7 @@ public class EmailServiceImpl implements EmailService {
         context.setVariables(variableMap);
         messageHelper.setSubject(EmailTemplate.PAYMENT_CONFIRMATION.getSubject());
         try {
+            log.info("Preparing Email content to send the email");
             final String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
             messageHelper.setTo(destinationEmail);
@@ -90,7 +91,7 @@ public class EmailServiceImpl implements EmailService {
         messageHelper.setSubject(EmailTemplate.ORDER_CONFIRMATION.getSubject());
 
         try {
-
+            log.info("Inside try block sendOrderConfirmationEmail method");
             final String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
             messageHelper.setTo(destinationEmail);

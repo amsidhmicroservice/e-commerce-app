@@ -3,6 +3,7 @@ package com.amsidh.mvc.paymentservice.kafka;
 import com.amsidh.mvc.kafka.payment.PaymentNotificationMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.Message;
@@ -21,6 +22,8 @@ public class PaymentNotificationProducer {
             MessageBuilder
                     .withPayload(paymentNotificationMessage)
                     .setHeader(KafkaHeaders.TOPIC, "payment-topic")
+                    .setHeader("X-Trace-ID", MDC.get("traceId"))
+                    .setHeader("X-Correlation-ID", MDC.get("traceId"))
                     .build();
     log.info("Payment notification message built: {}", message);
     kafkaTemplate.send(message);

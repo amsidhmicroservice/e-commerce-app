@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <springProperty scope="context" name="service-name" source="spring.application.name" />
+    <springProperty scope="context" name="version" source="info.app.version" />
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <timestamp>
+                    <fieldName>@timestamp</fieldName>
+                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</pattern>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <context />
+                <pattern>
+                    <pattern>
+                        <omitEmptyFields>true</omitEmptyFields> { "tracing": { "traceId":
+                        "%mdc{traceId:-}", "spanId": "%mdc{spanId:-}", "parentSpanId":
+                        "%mdc{parentId:-}", "sampled": "%mdc{sampled:-}", "service":
+                        "${service-name:-currency-conversion}", "version": "${version:-unknown}" } } </pattern>
+                </pattern>
+
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
+                <logLevel>
+                    <fieldName>severity</fieldName>
+                </logLevel>
+                <pattern>
+                    <omitEmptyFields>true</omitEmptyFields>
+                    <pattern>
+                        {
+                        "logMessage": "%message"
+                        }
+                    </pattern>
+                </pattern>
+                <callerData>
+                    <fieldName>log_class_info</fieldName>
+                    <classFieldName>log_source_class</classFieldName>
+                    <methodFieldName>log_source_method</methodFieldName>
+                    <lineFieldName>log_source_line</lineFieldName>
+                    <fileFieldName>[ignore]</fileFieldName>
+                </callerData>
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+
+                <arguments>
+                    <includeNonStructuredArguments>true</includeNonStructuredArguments>
+                </arguments>
+                <stackHash>
+                    <fieldName>exception-hash</fieldName>
+                </stackHash>
+                <stackTrace>
+                    <fieldName>exception</fieldName>
+                    <throwableConverter
+                        class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <shortenedClassNameLength>30</shortenedClassNameLength>
+                        <maxDepthPerThrowable>15</maxDepthPerThrowable>
+                        <maxLength>4096</maxLength>
+                        <rootCauseFirst>true</rootCauseFirst>
+                        <inlineHash>true</inlineHash>
+                    </throwableConverter>
+                </stackTrace>
+                <logstashMarkers />
+            </providers>
+        </encoder>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="stdout" />
+    </root>
+</configuration>

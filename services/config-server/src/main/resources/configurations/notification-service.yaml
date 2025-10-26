@@ -46,3 +46,6 @@ notification-service:
         order-confirmation: order-confirmation-group
         payment-confirmation: payment-confirmation-group
 
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-},%X{correlationId:-}]"
