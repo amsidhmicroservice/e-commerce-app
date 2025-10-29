@@ -27,11 +27,17 @@ public class PaymentServiceClient {
                 HttpMethod.POST,
                 httpRequestEntity,
                 new ParameterizedTypeReference<>() {
-                }
-        );
+                });
         if (response.getStatusCode().isError()) {
-            throw new BusinessException("Error occurred while purchasing products from payment-service: " + response.getStatusCode());
+            throw new BusinessException(
+                    "Error occurred while purchasing products from payment-service: " + response.getStatusCode());
         }
+
+        // Validate response body is not null
+        if (response.getBody() == null) {
+            throw new BusinessException("Payment service returned null response body");
+        }
+
         return response.getBody();
     }
 }

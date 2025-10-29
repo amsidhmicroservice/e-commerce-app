@@ -9,6 +9,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
+/**
+ * Notification entity representing a notification sent to a customer.
+ * Stored in MongoDB collection "notifications".
+ * Can represent either an order confirmation or payment notification.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

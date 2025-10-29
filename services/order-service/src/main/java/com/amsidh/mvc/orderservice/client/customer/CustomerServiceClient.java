@@ -17,7 +17,9 @@ public class CustomerServiceClient {
     private final RestTemplate restTemplate;
 
     public Optional<CustomerResponse> findCustomerById(String customerId) {
-        final CustomerResponse customerResponse = restTemplate.getForObject(customerServiceUrl + "/" + customerId, CustomerResponse.class);
-        return Optional.of(customerResponse);
+        final CustomerResponse customerResponse = restTemplate.getForObject(customerServiceUrl + "/" + customerId,
+                CustomerResponse.class);
+        // Wrap in Optional, handling null case properly
+        return Optional.ofNullable(customerResponse);
     }
 }

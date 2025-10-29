@@ -21,17 +21,34 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Integer createPayment(PaymentRequest paymentRequest) {
-        log.info("Creating payment for request: {}", paymentRequest);
-        final Payment payment = PaymentMapper
-                .toPayment(paymentRequest);
-        log.info("Saving payment entity: {}", payment);
+        log.info("Starting payment creation - Amount: {}, Method: {}, OrderRef: {}, Customer: {}",
+                paymentRequest.amount(),
+                paymentRequest.paymentMethod(),
+                paymentRequest.orderReference(),
+                paymentRequest.customerResponse() != null ? paymentRequest.customerResponse().email() : "N/A");
+
+        // Convert request to entity
+        final Payment payment = PaymentMapper.toPayment(paymentRequest);
+        log.debug("Mapped payment request to entity - OrderRef: {}", payment.getOrderId());
+
+        // Save payment to database
         final Payment savedPayment = paymentRepository.save(payment);
-        log.info("Payment saved successfully with id: {}", savedPayment.getId());
+        log.info("Payment saved successfully - PaymentID: {}, Amount: {}, OrderRef: {}",
+                savedPayment.getId(),
+                savedPayment.getAmount(),
+                savedPayment.getOrderId());
 
+        // Prepare payment notification message
+        final PaymentNotificationMessage paymentNotificationMessage = PaymentMapper
+                .toPaymentNotificationMessage(paymentRequest);
+        log.debug("Publishing payment notification to Kafka - OrderRef: {}, Customer: {}",
+                paymentNotificationMessage.orderReference(),
+                paymentNotificationMessage.customerEmailId());
 
-        final PaymentNotificationMessage paymentNotificationMessage = PaymentMapper.toPaymentNotificationMessage(paymentRequest);
-        log.info("Sending payment notification message: {}", paymentNotificationMessage);
+        // Send notification via Kafka
         paymentNotificationProducer.sendPaymentNotification(paymentNotificationMessage);
+        log.info("Payment notification published to Kafka successfully - PaymentID: {}", savedPayment.getId());
+
         return savedPayment.getId();
     }
 }

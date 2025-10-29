@@ -11,6 +11,12 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Order entity representing a customer order.
+ * Contains order details including reference, total amount, payment method, and
+ * associated order lines.
+ * Uses JPA auditing for automatic timestamp management.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

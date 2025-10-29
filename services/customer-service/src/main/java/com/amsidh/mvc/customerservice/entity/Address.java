@@ -6,6 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Address entity representing a customer's physical address.
+ * Contains street, house number, and zip code information.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

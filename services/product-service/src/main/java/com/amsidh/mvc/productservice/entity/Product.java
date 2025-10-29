@@ -5,7 +5,11 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
-
+/**
+ * Product entity representing a product in the catalog.
+ * Contains product information including name, description, price, available
+ * quantity, and category association.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

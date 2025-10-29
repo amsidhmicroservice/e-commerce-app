@@ -36,11 +36,20 @@ public class EmailServiceImpl implements EmailService {
             String destinationEmail,
             String customerName,
             BigDecimal amount,
-            String orderReference
-    ) throws MessagingException {
-        // Implementation for sending email goes here
+            String orderReference) throws MessagingException {
+
+        // Validate required parameters
+        if (destinationEmail == null || destinationEmail.isBlank()) {
+            log.error("Cannot send payment email - destination email is null or empty");
+            throw new IllegalArgumentException("Destination email cannot be null or empty");
+        }
+
+        log.info("Starting payment confirmation email process - Recipient: {}, OrderRef: {}, Amount: {}",
+                destinationEmail, orderReference, amount);
+
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
+        final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,
+                MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
         messageHelper.setFrom("contact@aliboucoding.com");
         final String templateName = EmailTemplate.PAYMENT_CONFIRMATION.getTemplate();
 
@@ -52,15 +61,24 @@ public class EmailServiceImpl implements EmailService {
         Context context = new Context();
         context.setVariables(variableMap);
         messageHelper.setSubject(EmailTemplate.PAYMENT_CONFIRMATION.getSubject());
+
         try {
-            log.info("Preparing Email content to send the email");
+            log.debug("Processing payment confirmation email template: {}", templateName);
             final String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
             messageHelper.setTo(destinationEmail);
+            log.debug("Sending payment confirmation email to: {}", destinationEmail);
             javaMailSender.send(mimeMessage);
-            log.info("EMAIL- Payment confirmation email sent to {} using template {}", destinationEmail, templateName);
+            log.info("Successfully sent payment confirmation email to {} for order {}", destinationEmail,
+                    orderReference);
+        } catch (MessagingException e) {
+            log.error("Failed to send payment confirmation email to {} for order {} - MessagingException: {}",
+                    destinationEmail, orderReference, e.getMessage(), e);
+            throw e;
         } catch (Exception e) {
-            log.error("ERROR- Failed to send payment confirmation email to {} with error message {}", destinationEmail, e.getMessage(), e);
+            log.error("Failed to send payment confirmation email to {} for order {} - Unexpected error: {}",
+                    destinationEmail, orderReference, e.getMessage(), e);
+            throw new MessagingException("Failed to send payment confirmation email", e);
         }
     }
 
@@ -71,11 +89,21 @@ public class EmailServiceImpl implements EmailService {
             String customerName,
             BigDecimal amount,
             String orderReference,
-            List<PurchaseResponse> products
-    ) throws MessagingException {
-        // Implementation for sending email goes here
+            List<PurchaseResponse> products) throws MessagingException {
+
+        // Validate required parameters
+        if (destinationEmail == null || destinationEmail.isBlank()) {
+            log.error("Cannot send order email - destination email is null or empty");
+            throw new IllegalArgumentException("Destination email cannot be null or empty");
+        }
+
+        log.info(
+                "Starting order confirmation email process - Recipient: {}, OrderRef: {}, Amount: {}, Products count: {}",
+                destinationEmail, orderReference, amount, products.size());
+
         final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
+        final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage,
+                MimeMessageHelper.MULTIPART_MODE_RELATED, StandardCharsets.UTF_8.name());
         messageHelper.setFrom("contact@aliboucoding.com");
 
         final String templateName = EmailTemplate.ORDER_CONFIRMATION.getTemplate();
@@ -91,14 +119,21 @@ public class EmailServiceImpl implements EmailService {
         messageHelper.setSubject(EmailTemplate.ORDER_CONFIRMATION.getSubject());
 
         try {
-            log.info("Inside try block sendOrderConfirmationEmail method");
+            log.debug("Processing order confirmation email template: {}", templateName);
             final String htmlTemplate = templateEngine.process(templateName, context);
             messageHelper.setText(htmlTemplate, true);
             messageHelper.setTo(destinationEmail);
+            log.debug("Sending order confirmation email to: {}", destinationEmail);
             javaMailSender.send(mimeMessage);
-            log.info("EMAIL- Order confirmation email sent to {} using template {}", destinationEmail, templateName);
+            log.info("Successfully sent order confirmation email to {} for order {}", destinationEmail, orderReference);
+        } catch (MessagingException e) {
+            log.error("Failed to send order confirmation email to {} for order {} - MessagingException: {}",
+                    destinationEmail, orderReference, e.getMessage(), e);
+            throw e;
         } catch (Exception e) {
-            log.error("ERROR- Failed to send order confirmation email to {} with error message {}", destinationEmail, e.getMessage(), e);
+            log.error("Failed to send order confirmation email to {} for order {} - Unexpected error: {}",
+                    destinationEmail, orderReference, e.getMessage(), e);
+            throw new MessagingException("Failed to send order confirmation email", e);
         }
     }
 }

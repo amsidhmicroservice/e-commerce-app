@@ -15,11 +15,22 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.Map;
 
+/**
+ * Application configuration class for Notification Service.
+ * Configures JavaMailSender for email notifications and async task executor
+ * with MDC context propagation.
+ */
 @Configuration
 @EnableConfigurationProperties(MailProperties.class)
 @Slf4j
 public class AppConfig {
 
+    /**
+     * Configures JavaMailSender bean for sending emails.
+     * 
+     * @param mailProperties mail configuration properties from application config
+     * @return configured JavaMailSender instance
+     */
     @Bean
     public JavaMailSender javaMailSender(MailProperties mailProperties) {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
@@ -41,9 +52,12 @@ public class AppConfig {
         return sender;
     }
 
-
-    //THis is done because EMailService is @Async and to propagate
-    // the MDC context we need this
+    /**
+     * Configures TaskExecutor with MDC context propagation for async operations.
+     * This ensures that MDC context (e.g., traceId) is propagated to async threads.
+     * 
+     * @return configured TaskExecutor instance
+     */
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -56,6 +70,10 @@ public class AppConfig {
         return executor;
     }
 
+    /**
+     * Task decorator that propagates MDC context to async threads.
+     * Ensures distributed tracing context is maintained across async boundaries.
+     */
     public static class MDCTaskDecorator implements TaskDecorator {
         @Override
         public Runnable decorate(Runnable runnable) {

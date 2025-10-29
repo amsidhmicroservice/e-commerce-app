@@ -8,3 +8,11 @@ spring:
     import: optional:configserver:http://localhost:8888/config-server/api/v1/config
     #import: configserver:http://localhost:8888/config-server/api/v1/config
 
+# Enable detailed logging for Eureka server events
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    com.netflix.discovery: DEBUG
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - Trace: [%X{traceId:-}] - %msg%n'
+

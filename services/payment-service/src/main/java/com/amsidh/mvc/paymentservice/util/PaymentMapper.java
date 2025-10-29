@@ -14,13 +14,17 @@ public interface PaymentMapper {
     }
 
     static PaymentNotificationMessage toPaymentNotificationMessage(PaymentRequest paymentRequest) {
+        // Validate customer response is not null
+        if (paymentRequest.customerResponse() == null) {
+            throw new IllegalArgumentException("Customer response cannot be null for payment notification");
+        }
+
         return new PaymentNotificationMessage(
                 paymentRequest.orderReference(),
                 paymentRequest.amount(),
                 paymentRequest.paymentMethod(),
                 paymentRequest.customerResponse().firstName(),
                 paymentRequest.customerResponse().lastName(),
-                paymentRequest.customerResponse().email()
-        );
+                paymentRequest.customerResponse().email());
     }
 }

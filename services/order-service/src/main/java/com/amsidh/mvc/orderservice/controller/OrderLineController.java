@@ -9,14 +9,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller for order line operations.
+ *
+ * Provides endpoint(s) to retrieve order lines related to an order.
+ */
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/order-lines")
 @Slf4j
 @CrossOrigin(origins = "*")
 public class OrderLineController {
+    // Injects OrderLineService dependency
     private final OrderLineService orderLineService;
 
+    /**
+     * Retrieve order lines by order id.
+     * 
+     * @param orderId id of the order
+     * @return list of order line responses for the given order
+     */
     @GetMapping("/order/{order-id}")
     public ResponseEntity<List<OrderLineResponse>> findByOrderId(@PathVariable("order-id") Integer orderId) {
         log.info("Received request to get order lines for order id: {}", orderId);

@@ -5,7 +5,12 @@ import lombok.*;
 
 import java.util.List;
 
-
+/**
+ * Category entity representing a product category.
+ * Products are organized into categories for better organization and filtering.
+ * Cascade delete ensures all products in a category are removed when the
+ * category is deleted.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

@@ -10,6 +10,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * Payment entity representing a payment transaction.
+ * Contains payment details including amount, payment method, and associated
+ * order ID.
+ * Uses JPA auditing for automatic timestamp management.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
