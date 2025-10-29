@@ -32,3 +32,6 @@ spring:
 
   zipkin:
     base-url: http://zipkin:9411/
+info:
+  app:
+    version: '@project.version@'

@@ -15,3 +15,7 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
+info:
+  app:
+    version: '@project.version@'
