@@ -46,7 +46,7 @@
                 </threadName>
 
                 <arguments>
-                    <includeNonStructuredArguments>true</includeNonStructuredArguments>
+                    <includeNonStructuredArguments>false</includeNonStructuredArguments>
                 </arguments>
                 <stackHash>
                     <fieldName>exception-hash</fieldName>

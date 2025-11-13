@@ -1,5 +1,7 @@
 package com.amsidh.mvc.notificationservice.config;
 
+import java.util.Map;
+
 import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -9,11 +11,9 @@ import org.springframework.core.task.TaskDecorator;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Application configuration class for Notification Service.

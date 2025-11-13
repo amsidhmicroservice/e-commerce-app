@@ -6,7 +6,6 @@ spring:
     name: notification-service
   config:
     import: optional:configserver:http://localhost:8888/config-server/api/v1/config
-    #import: configserver:http://localhost:8888/config-server/api/v1/config
   mail:
     host: localhost
     port: 1025

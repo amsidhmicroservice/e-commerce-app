@@ -1,4 +1,6 @@
 services:
+  # postgresql base url is http://localhost:5432 from outside the docker-compose.
+  # postgresql base url from container is http://ms_pg_sql:5432 from inside the docker-compose.
   postgresql:
     container_name: ms_pg_sql
     image: postgres:15
@@ -15,6 +17,8 @@ services:
       - microservices-net
     restart: unless-stopped
 
+  # pgadmin ui based on postgresql and url is http://localhost:5050 from outside the docker-compose.
+  # username is admin
   pgadmin:
     container_name: ms_pgadmin
     image: dpage/pgadmin4
@@ -32,6 +36,8 @@ services:
       - microservices-net
     restart: unless-stopped
 
+  # mongo db based on mongo and url is http://localhost:27017 from outside the docker-compose.
+  # username is alibou
   mongodb:
     image: mongo
     container_name: mongo_db
@@ -46,7 +52,9 @@ services:
       - microservices-net
     restart: unless-stopped
 
-  # default username is admin and password is pass for mango-express
+  # mongo-express is a web interface for MongoDB
+  # url is http://localhost:8081 from outside the docker-compose.
+  # the default username is admin and the password is pass for mango-express
   mongo-express:
     image: mongo-express
     container_name: mongo_express
@@ -93,6 +101,7 @@ services:
       - microservices-net
     restart: unless-stopped
 
+  # kafka ui base url http://localhost:8082
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka_ui
@@ -105,6 +114,7 @@ services:
       - microservices-net
     restart: unless-stopped
 
+# To access zipkin use url http://localhost:9411
   zipkin:
     container_name: zipkin
     image: openzipkin/zipkin
