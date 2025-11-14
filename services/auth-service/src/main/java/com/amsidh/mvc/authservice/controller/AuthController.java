@@ -1,19 +1,9 @@
 package com.amsidh.mvc.authservice.controller;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.amsidh.mvc.authservice.dto.AuthRequest;
 import com.amsidh.mvc.authservice.dto.AuthResponse;
 import com.amsidh.mvc.authservice.dto.UserCredentialRequest;
 import com.amsidh.mvc.authservice.service.AuthService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,6 +14,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for authentication endpoints.
@@ -148,48 +144,4 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Validate JWT token.
-     * 
-     * Validates token signature, expiration, and returns user email.
-     * This endpoint is primarily used by API Gateway.
-     * 
-     * Request: GET /validate?token=<jwt-token>
-     * 
-     * Success Response: 200 OK
-     * {
-     * "email": "john.doe@example.com"
-     * }
-     * 
-     * Error Responses:
-     * - 400 BAD REQUEST: Missing token parameter
-     * - 401 UNAUTHORIZED: Invalid or expired token
-     * - 500 INTERNAL SERVER ERROR: Server error
-     * 
-     * Gateway Integration:
-     * 1. Gateway extracts token from Authorization header
-     * 2. Gateway calls: GET /validate?token=<token>
-     * 3. Auth-service validates and returns email
-     * 4. Gateway adds email to request headers (X-User-Email)
-     * 5. Gateway routes request to business service
-     * 
-     * @param token the JWT token to validate (without "Bearer " prefix)
-     * @return user email extracted from valid token
-     */
-    @GetMapping("/validate")
-    @Operation(summary = "Validate JWT token", description = "Validates token and returns user email. Used by API Gateway for request authentication.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Token is valid", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "Missing token parameter", content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "401", description = "Invalid or expired token", content = @Content(mediaType = "application/json"))
-    })
-    public ResponseEntity<String> validateToken(
-            @RequestParam @Parameter(description = "JWT token to validate", required = true) String token) {
-
-        log.debug("Token validation request received");
-        String email = authService.validateToken(token);
-        log.debug("Token validated successfully for email: {}", email);
-
-        return ResponseEntity.ok(email);
-    }
 }

@@ -1,9 +1,10 @@
 package com.amsidh.mvc.gatewayservice.filter;
 
+import com.amsidh.mvc.gatewayservice.exception.AuthenticationException;
+import com.amsidh.mvc.gatewayservice.util.JwtUtil;
 import com.amsidh.mvc.gatewayservice.validator.RouteValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -14,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -26,15 +26,10 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 
-    private final RouteValidator routeValidator;
-    private final WebClient.Builder webClientBuilder;
+    private final JwtUtil jwtUtil;
 
-    @Value("${auth.service.url:lb://AUTH-SERVICE}")
-    private String authServiceUrl;
-
-    public AuthenticationFilter(RouteValidator routeValidator, WebClient.Builder webClientBuilder) {
-        this.routeValidator = routeValidator;
-        this.webClientBuilder = webClientBuilder;
+    public AuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -48,7 +43,8 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         String path = request.getURI().getPath();
         log.debug("Authentication filter processing request: {}", path);
         // Skip authentication for public endpoints
-        if (routeValidator.isSecured.test(request)) {
+        final boolean isSecured = RouteValidator.isSecured.test(request);
+        if (isSecured) {
             // Check if the Authorization header exists and starts with "Bearer "
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION) ||
                     !request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION).startsWith("Bearer ")) {
@@ -73,19 +69,28 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
 
     private Mono<String> validateTokenWithAuthService(String bearerToken) {
-        log.debug("Validating token with auth-service: {}", authServiceUrl);
-        // Build the complete validation endpoint URL
-        String validateEndpoint = authServiceUrl + "/api/v1/auth-service/auth/validate";
         final String jwtToken = bearerToken.substring(7);
-        return webClientBuilder.build()
-                .get()
-                .uri(validateEndpoint + "?token=" + jwtToken) // ✅ Variable IS used here
-                .retrieve()
-                .bodyToMono(String.class)
-                .onErrorMap(ex -> {
-                    log.error("Error validating token with auth-service", ex);
-                    return ex;
-                });
+        try {
+            // Extract email from token
+            String email = jwtUtil.extractEmail(jwtToken);
+            log.debug("Extracted email from token: {}", email);
+
+            // Validate token (signature + expiration + subject)
+            final boolean isValidToken = jwtUtil.validateToken(jwtToken, email);
+            if (isValidToken) {
+                log.debug("Token validated successfully for email: {}", email);
+                return Mono.justOrEmpty(email);
+            } else {
+                log.error("Invalid token");
+                return Mono.empty();
+            }
+        } catch (AuthenticationException e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error during token validation", e);
+            throw new AuthenticationException("Token validation failed: " + e.getMessage());
+        }
     }
 
     private Mono<Void> handleAuthError(ServerWebExchange exchange, WebClientResponseException ex) {

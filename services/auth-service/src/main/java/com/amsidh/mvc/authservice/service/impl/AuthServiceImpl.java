@@ -130,42 +130,4 @@ public class AuthServiceImpl implements AuthService {
                 .expiresIn(86400000L) // 24 hours in milliseconds
                 .build();
     }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * Implementation details:
-     * - Extracts email from token claims (subject)
-     * - Validates signature using secret key
-     * - Checks expiration timestamp
-     * - Returns email for downstream authorization
-     * 
-     * Gateway Integration:
-     * Gateway calls this endpoint to validate tokens
-     * and extract user identity for request headers
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public String validateToken(String token) {
-        log.debug("Validating token");
-
-        try {
-            // Extract email from token
-            String email = jwtUtil.extractEmail(token);
-            log.debug("Extracted email from token: {}", email);
-
-            // Validate token (signature + expiration + subject)
-            jwtUtil.validateToken(token, email);
-            log.debug("Token validated successfully for email: {}", email);
-
-            return email;
-
-        } catch (AuthenticationException e) {
-            log.error("Token validation failed: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error during token validation", e);
-            throw new AuthenticationException("Token validation failed: " + e.getMessage());
-        }
-    }
 }
