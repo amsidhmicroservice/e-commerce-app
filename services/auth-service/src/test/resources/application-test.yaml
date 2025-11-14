@@ -1,0 +1,56 @@
+# Test Configuration for Auth Service
+# This configuration uses an in-memory H2 database for testing
+
+spring:
+  application:
+    name: auth-service
+    
+  # Use H2 in-memory database for tests
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+    
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+        dialect: org.hibernate.dialect.H2Dialect
+        
+  # Disable Eureka for tests
+  cloud:
+    config:
+      enabled: false
+      import-check:
+        enabled: false
+    discovery:
+      enabled: false
+      
+  # Disable Zipkin for tests
+  zipkin:
+    enabled: false
+    
+eureka:
+  client:
+    enabled: false
+    register-with-eureka: false
+    fetch-registry: false
+    
+management:
+  tracing:
+    enabled: false
+    sampling:
+      probability: 0.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+      
+# JWT Configuration (test values)
+jwt:
+  secret: test-secret-key-for-testing-purposes-minimum-256-bits-required-for-hs256-algorithm
+  expiration: 3600000  # 1 hour for testing

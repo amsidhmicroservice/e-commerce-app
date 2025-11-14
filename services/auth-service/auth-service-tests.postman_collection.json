@@ -1,0 +1,695 @@
+{
+	"info": {
+		"_postman_id": "auth-service-jwt-testing",
+		"name": "E-Commerce Auth Service - JWT Testing",
+		"description": "Comprehensive test collection for JWT-based authentication system.\n\n**Services Tested:**\n- Gateway Service (Port 8080)\n- Auth Service (Port 8099)\n\n**Features:**\n- User Registration\n- User Login (JWT Token Generation)\n- Token Validation\n- Protected Endpoint Access\n- Error Handling\n\n**Author:** Amsidh Mohammed\n**Date:** October 31, 2025",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01 - Public Endpoints",
+			"item": [
+				{
+					"name": "Register User - Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response body contains success message\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"registered successfully\");",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/register",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register a new user with name, email, and password.\n\n**Expected:** 201 Created with success message"
+					},
+					"response": []
+				},
+				{
+					"name": "Register User - Duplicate Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 409 Conflict\", function () {",
+									"    pm.response.to.have.status(409);",
+									"});",
+									"",
+									"pm.test(\"Error message mentions email already exists\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include(\"already exists\");",
+									"});",
+									"",
+									"pm.test(\"Response has error structure\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"timestamp\");",
+									"    pm.expect(jsonData).to.have.property(\"status\");",
+									"    pm.expect(jsonData).to.have.property(\"error\");",
+									"    pm.expect(jsonData).to.have.property(\"message\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Jane Doe\",\n    \"email\": \"john@example.com\",\n    \"password\": \"password456\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/register",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Attempt to register with duplicate email.\n\n**Expected:** 409 Conflict with error message"
+					},
+					"response": []
+				},
+				{
+					"name": "Register User - Invalid Email",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Validation errors present\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"validationErrors\");",
+									"    pm.expect(jsonData.validationErrors).to.have.property(\"email\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"invalid-email-format\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/register",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register with invalid email format.\n\n**Expected:** 400 Bad Request with validation errors"
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains JWT token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property(\"token\");",
+									"    pm.expect(jsonData.token).to.be.a(\"string\");",
+									"    pm.expect(jsonData.token.length).to.be.above(0);",
+									"    ",
+									"    // Save token for subsequent requests",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"});",
+									"",
+									"pm.test(\"Token type is Bearer\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.tokenType).to.eql(\"Bearer\");",
+									"});",
+									"",
+									"pm.test(\"Token expires in 24 hours (86400000ms)\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.expiresIn).to.eql(86400000);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/token",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Login with valid credentials and receive JWT token.\n\n**Expected:** 200 OK with token, tokenType, and expiresIn\n\n**Note:** Token is automatically saved to environment variable 'jwt_token' for use in protected endpoint tests."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Invalid Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									"",
+									"pm.test(\"Error message indicates invalid credentials\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.message).to.include(\"Invalid\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"john@example.com\",\n    \"password\": \"wrongpassword\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/token",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Login with invalid password.\n\n**Expected:** 401 Unauthorized with error message"
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Non-existent User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"nonexistent@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/token",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"token"
+							]
+						},
+						"description": "Login with non-existent email.\n\n**Expected:** 401 Unauthorized"
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Token - Valid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response contains user email\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"@\");",
+									"    pm.expect(pm.response.text()).to.include(\"example.com\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/validate?token={{jwt_token}}",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"description": "JWT token from login"
+								}
+							]
+						},
+						"description": "Validate JWT token and retrieve user email.\n\n**Expected:** 200 OK with user's email as plain text\n\n**Note:** This endpoint is primarily used by the Gateway's AuthenticationFilter."
+					},
+					"response": []
+				},
+				{
+					"name": "Validate Token - Invalid",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/auth-service/auth/validate?token=invalid-token-12345",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth-service",
+								"auth",
+								"validate"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "invalid-token-12345"
+								}
+							]
+						},
+						"description": "Validate invalid JWT token.\n\n**Expected:** 401 Unauthorized"
+					},
+					"response": []
+				}
+			],
+			"description": "Tests for public endpoints that don't require authentication.\n\nThese endpoints bypass the Gateway's AuthenticationFilter:\n- /auth/register\n- /auth/token\n- /auth/validate\n- /actuator/**"
+		},
+		{
+			"name": "02 - Protected Endpoints",
+			"item": [
+				{
+					"name": "Access Protected Endpoint - No Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/order-service/orders",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order-service",
+								"orders"
+							]
+						},
+						"description": "Attempt to access protected endpoint without authentication.\n\n**Expected:** 401 Unauthorized (blocked by Gateway)\n\n**Note:** Request never reaches order-service."
+					},
+					"response": []
+				},
+				{
+					"name": "Access Protected Endpoint - Invalid Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 401 Unauthorized\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer invalid-token-12345",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/order-service/orders",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order-service",
+								"orders"
+							]
+						},
+						"description": "Attempt to access protected endpoint with invalid token.\n\n**Expected:** 401 Unauthorized (token validation fails)"
+					},
+					"response": []
+				},
+				{
+					"name": "Access Protected Endpoint - Valid Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// May return 200 with data, 404 if service not found, or 503 if service unavailable",
+									"pm.test(\"Token is accepted (status not 401)\", function () {",
+									"    pm.expect(pm.response.code).to.not.equal(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/api/v1/order-service/orders",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"order-service",
+								"orders"
+							]
+						},
+						"description": "Access protected endpoint with valid JWT token.\n\n**Expected:** \n- If order-service exists: 200 OK with data\n- If order-service not found: 404 Not Found or 503 Service Unavailable\n- Gateway adds X-User-Email header before routing"
+					},
+					"response": []
+				}
+			],
+			"description": "Tests for protected endpoints that require JWT authentication.\n\nThe Gateway's AuthenticationFilter:\n1. Extracts Authorization header\n2. Validates JWT token with auth-service\n3. Adds X-User-Email header\n4. Routes to downstream service\n\nWithout valid token, requests are blocked with 401."
+		},
+		{
+			"name": "03 - Actuator Endpoints",
+			"item": [
+				{
+					"name": "Gateway Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Health status is UP\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.status).to.eql(\"UP\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/actuator/health",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"actuator",
+								"health"
+							]
+						},
+						"description": "Check Gateway service health.\n\n**Expected:** 200 OK with status: UP"
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Routes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Routes list is returned\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/actuator/gateway/routes",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"actuator",
+								"gateway",
+								"routes"
+							]
+						},
+						"description": "List all Gateway routes.\n\n**Expected:** 200 OK with array of route definitions"
+					},
+					"response": []
+				},
+				{
+					"name": "Gateway Metrics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/actuator/metrics",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"actuator",
+								"metrics"
+							]
+						},
+						"description": "List available metrics.\n\n**Expected:** 200 OK with metrics names"
+					},
+					"response": []
+				}
+			],
+			"description": "Tests for Spring Boot Actuator endpoints.\n\nThese are public endpoints (no authentication required) used for monitoring and management."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "auth_url",
+			"value": "http://localhost:8099",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

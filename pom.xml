@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>com.amsidh.mvc</groupId>
+    <artifactId>e-commerce-app</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>e-commerce-app</name>
+    <description>E-Commerce Microservices Platform</description>
+    
+    <!-- Common properties (optional - for consistency) -->
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    <!-- Modules in dependency order -->
+    <modules>
+        <module>services/config-server</module>      <!-- Layer 1: Infrastructure -->
+        <module>services/discovery-service</module>  <!-- Layer 1: Infrastructure -->
+        <module>services/auth-service</module>       <!-- Layer 2: Security -->
+        <module>services/gateway-service</module>    <!-- Layer 2: Security -->
+        <module>services/customer-service</module>   <!-- Layer 3: Business -->
+        <module>services/product-service</module>    <!-- Layer 3: Business -->
+        <module>services/order-service</module>      <!-- Layer 3: Business -->
+        <module>services/payment-service</module>    <!-- Layer 3: Business -->
+        <module>services/notification-service</module> <!-- Layer 3: Business -->
+    </modules>
+    
+    <!-- Build plugins for all modules (optional) -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+    
+    <!-- Profiles for Docker builds -->
+    <profiles>
+        <!-- Build all Docker images locally -->
+        <profile>
+            <id>docker-all</id>
+            <build>
+                <defaultGoal>package</defaultGoal>
+            </build>
+        </profile>
+        
+        <!-- Push all Docker images -->
+        <profile>
+            <id>docker-push-all</id>
+            <build>
+                <defaultGoal>deploy</defaultGoal>
+            </build>
+        </profile>
+    </profiles>
+</project>

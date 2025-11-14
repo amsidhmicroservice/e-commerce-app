@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Include default Spring Boot logging configuration -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- Read application properties for dynamic configuration -->
+    <springProperty scope="context" name="service-name" source="spring.application.name" />
+    <springProperty scope="context" name="version" source="info.app.version" />
+
+    <!-- Console appender with JSON structured logging for distributed tracing -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Timestamp in ISO 8601 format (UTC) -->
+                <timestamp>
+                    <fieldName>@timestamp</fieldName>
+                    <pattern>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</pattern>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+
+                <!-- Spring Boot context information -->
+                <context />
+
+                <!-- Distributed tracing information (Zipkin/Micrometer) -->
+                <pattern>
+                    <pattern>
+                        <omitEmptyFields>true</omitEmptyFields> { "tracing": { "traceId":
+                        "%mdc{traceId:-}", "spanId": "%mdc{spanId:-}", "parentSpanId":
+                        "%mdc{parentId:-}", "sampled": "%mdc{sampled:-}", "service":
+                        "${service-name:-auth-service}", "version": "${version:-unknown}" } } </pattern>
+                </pattern>
+
+                <!-- Logger name (class name) -->
+                <loggerName>
+                    <fieldName>logger</fieldName>
+                </loggerName>
+
+                <!-- Log level (INFO, WARN, ERROR, DEBUG) -->
+                <logLevel>
+                    <fieldName>severity</fieldName>
+                </logLevel>
+
+                <!-- Log message -->
+                <pattern>
+                    <omitEmptyFields>true</omitEmptyFields>
+                    <pattern>
+                        {
+                        "logMessage": "%message"
+                        }
+                    </pattern>
+                </pattern>
+
+                <!-- Caller data (class, method, line number) -->
+                <callerData>
+                    <fieldName>log_class_info</fieldName>
+                    <classFieldName>log_source_class</classFieldName>
+                    <methodFieldName>log_source_method</methodFieldName>
+                    <lineFieldName>log_source_line</lineFieldName>
+                    <fileFieldName>[ignore]</fileFieldName>
+                </callerData>
+
+                <!-- Thread name -->
+                <threadName>
+                    <fieldName>thread</fieldName>
+                </threadName>
+
+                <!-- Method arguments -->
+                <arguments>
+                    <includeNonStructuredArguments>true</includeNonStructuredArguments>
+                </arguments>
+
+                <!-- Exception hash for grouping similar errors -->
+                <stackHash>
+                    <fieldName>exception-hash</fieldName>
+                </stackHash>
+
+                <!-- Stack trace for exceptions -->
+                <stackTrace>
+                    <fieldName>exception</fieldName>
+                    <throwableConverter
+                        class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                        <shortenedClassNameLength>30</shortenedClassNameLength>
+                        <maxDepthPerThrowable>15</maxDepthPerThrowable>
+                        <maxLength>4096</maxLength>
+                        <rootCauseFirst>true</rootCauseFirst>
+                        <inlineHash>true</inlineHash>
+                    </throwableConverter>
+                </stackTrace>
+
+                <!-- Logstash markers for additional context -->
+                <logstashMarkers />
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Root logger configuration -->
+    <root level="info">
+        <appender-ref ref="stdout" />
+    </root>
+
+    <!-- Auth Service specific logging levels -->
+    <logger name="com.amsidh.mvc.authservice" level="info" />
+
+    <!-- Spring Framework logging (reduce noise) -->
+    <logger name="org.springframework" level="warn" />
+    <logger name="org.springframework.web" level="info" />
+    <logger name="org.springframework.security" level="info" />
+
+    <!-- Hibernate/JPA logging (reduce noise) -->
+    <logger name="org.hibernate" level="warn" />
+    <logger name="org.hibernate.SQL" level="debug" />
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace" />
+
+    <!-- Connection pool logging -->
+    <logger name="com.zaxxer.hikari" level="warn" />
+
+    <!-- Eureka client logging -->
+    <logger name="com.netflix.discovery" level="warn" />
+
+    <!-- Zipkin tracing logging -->
+    <logger name="zipkin2" level="warn" />
+    <logger name="brave" level="warn" />
+
+    <!--
+    Logging Configuration Summary:
+    
+    Structure:
+    - JSON structured logging for easy parsing by log aggregators
+    - Includes distributed tracing IDs (traceId, spanId) for request correlation
+    - UTC timestamps for consistency across time zones
+    - Exception hashing for error grouping
+    
+    Tracing Fields:
+    - traceId: Unique identifier for entire request flow across services
+    - spanId: Unique identifier for this specific operation
+    - parentSpanId: ID of the calling operation (for building trace tree)
+    - sampled: Whether this trace is sampled for storage
+    - service: Service name (auth-service)
+    - version: Application version for deployment tracking
+    
+    Log Levels:
+    - ROOT: INFO (general application logs)
+    - auth-service: INFO (our service logs)
+    - spring: WARN (reduce Spring framework noise)
+    - hibernate.SQL: DEBUG (show SQL queries in development)
+    - hibernate.type: TRACE (show SQL parameter values)
+    
+    Usage:
+    - Development: Console output with JSON format
+    - Production: Forward to log aggregator (ELK, Splunk, etc.)
+    - Distributed Tracing: Zipkin UI at http://localhost:9411
+    
+    Example JSON Output:
+    {
+      "@timestamp": "2025-10-31T10:15:30.123Z",
+      "tracing": {
+        "traceId": "5f8a9b2c3d4e5f6a",
+        "spanId": "7b8c9d0e1f2a3b4c",
+        "service": "auth-service",
+        "version": "1.0.0"
+      },
+      "logger": "com.amsidh.mvc.authservice.service.impl.AuthServiceImpl",
+      "severity": "INFO",
+      "logMessage": "User registered successfully with email: john@example.com",
+      "thread": "http-nio-8099-exec-1",
+      "log_class_info": {
+        "log_source_class": "AuthServiceImpl",
+        "log_source_method": "registerUser",
+        "log_source_line": 86
+      }
+    }
+    
+    Benefits:
+    1. Request Tracing: Follow a single request across all microservices
+    2. Error Correlation: Group similar errors using exception hash
+    3. Performance Analysis: Measure time spent in each span
+    4. Debugging: See exact class, method, line number for each log
+    5. Searchable: JSON format enables powerful log queries
+    6. Standardized: Consistent format across all microservices
+    -->
+</configuration>
