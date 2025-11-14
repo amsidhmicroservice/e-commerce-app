@@ -1,5 +1,6 @@
 package com.amsidh.mvc.gatewayservice.util;
 
+import com.amsidh.mvc.gatewayservice.config.JwtConfigEnum;
 import com.amsidh.mvc.gatewayservice.exception.AuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -37,10 +38,6 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
     private static final Logger log = LoggerFactory.getLogger(JwtUtil.class);
-
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
-
     /**
      * Validate the JWT token.
      * <p>
@@ -166,7 +163,7 @@ public class JwtUtil {
      * @return the signing key
      */
     private SecretKey getSigningKey() {
-        byte[] keyBytes = SECRET_KEY.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes = JwtConfigEnum.INSTANCE.getJwtSecret().getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
